@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable, Image } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image, Alert } from "react-native";
 import AuthModal from "./AuthModal.component.js";
 import GetMenuComponents from "../data/MenuComponents.js";
 import useSignIn from "../features/HomePage/hook/useSignIn.js";
@@ -9,10 +9,12 @@ function Navbar({ navigation }) {
     const menu = GetMenuComponents("naologado", {
         home: () => navigation.navigate("Home"),
         signUp: () => {
+            setErro("")
             setModalMode("signup")
             setModalAuthV(true)
         },
         signIn: () => {
+            setErro("")
             setModalMode("signin")
             setModalAuthV(true)
         },
@@ -21,22 +23,37 @@ function Navbar({ navigation }) {
     const [loading, setLoading] = useState(false)
     const [authmodalV, setModalAuthV] = useState(false);
     const [modalmode, setModalMode] = useState("");
+    const [erro, setErro] = useState("");
     const handleSignIn = useSignIn(setLoading);
     const handleSignUp = useSignUp(setLoading);
-    const handleSubmit = async (user) => {
+    const handleSubmit = async ({ user }) => {
+        setErro("")
+
+        if (!user.email?.trim() || !user.password) {
+            setErro("Preencha email e senha.")
+            return
+        }
+        if (modalmode === "signup" && !user.username?.trim()) {
+            setErro("Preencha o nome de usuário.")
+            return
+        }
+
         try {
             if (modalmode === "signin") {
-                const result = await handleSignIn(user)
-                console.log("Dados do Usuario: ", result)
+                const result = await handleSignIn({ user })
+                setModalAuthV(false)
+                Alert.alert(
+                    "Login realizado",
+                    `Bem-vindo(a), ${result?.usuario?.nome ?? ""}!`,
+                    [{ text: "Ver cursos", onPress: () => navigation.navigate("Cursos") }]
+                )
+            } else {
+                await handleSignUp({ user })
+                setModalAuthV(false)
+                Alert.alert("Conta criada", "Cadastro feito com sucesso! Agora entre com seu email e senha.")
             }
-            if (modalmode === "signup") {
-                const result = await handleSignUp(user)
-                console.log("Usuario Cadastrado: ", result)
-            }
-            setModalAuthV(false)
         } catch (issue) {
-            console.log("erro ao logar",
-                issue?.message ?? issue)
+            setErro(issue?.message ?? "Erro inesperado. Tente novamente.")
         }
     }
     return (
@@ -69,7 +86,9 @@ function Navbar({ navigation }) {
                 visible={authmodalV}
                 onClose={() => setModalAuthV(false)}
                 mode={modalmode}
-                onSubmit={handleSubmit}>
+                onSubmit={handleSubmit}
+                loading={loading}
+                error={erro}>
             </AuthModal>
         </View >
     );

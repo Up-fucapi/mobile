@@ -1,22 +1,13 @@
+import { postJson } from "../../../services/http";
+
 async function SignIn({ user = {} }) {
     const { email, password } = user;
-    const response = await fetch("https://choises-techdemo.onrender.com/signin", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            email,
-            password
-        }),
-    })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || "Erro ao execultar o login");
-    }
-    return data
+    // O backend espera "email" e "senha"
+    return postJson("/signin", {
+        email: (email ?? "").trim().toLowerCase(),
+        senha: password,
+    });
 }
 
 export default SignIn

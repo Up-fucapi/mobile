@@ -1,2 +1,2 @@
-// Endereço do backend. Troque pelo IP do seu PC, mantendo a porta 3000.
+// Endereço do backend publicado no Render (sem barra no final).
 export const API_URL = "https://backend-up-enna.onrender.com";

@@ -1,8 +1,7 @@
-// Onde colocar: MOBILE (src/features/CursosPage/view/CursosPage.js)
 import React, { useState, useEffect } from "react";
 import {
     View, Text, TextInput, FlatList, Pressable, Image,
-    ActivityIndicator, StatusBar, StyleSheet, TouchableOpacity,
+    ActivityIndicator, StatusBar, StyleSheet,
 } from "react-native";
 import { buscarCursos } from "../../../services/api";
 import { colors, shadow } from "../../../theme";
@@ -30,21 +29,11 @@ function CursosPage({ navigation }) {
             <StatusBar barStyle="light-content" />
 
             <View style={styles.header}>
-                <View style={styles.headerTop}>
-                    <Image
-                        source={require("../../../../assets/logo.png")}
-                        style={styles.logo}
-                        resizeMode="contain"
-                    />
-                    {/* 👉 Botão de Login adicionado no topo */}
-                    <TouchableOpacity 
-                        style={styles.botaoLoginTopo} 
-                        onPress={() => navigation.navigate("Login")}
-                    >
-                        <Text style={styles.textoBotaoLogin}>Entrar / Criar Conta</Text>
-                    </TouchableOpacity>
-                </View>
-
+                <Image
+                    source={require("../../../../assets/logo.png")}
+                    style={styles.logo}
+                    resizeMode="contain"
+                />
                 <Text style={styles.headerTitulo}>Fucapi+</Text>
                 <Text style={styles.headerSubtitulo}>Conheça os cursos em vídeo</Text>
             </View>
@@ -111,24 +100,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 24,
         borderBottomRightRadius: 24,
     },
-    headerTop: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    logo: { width: 120, height: 36 },
-    botaoLoginTopo: {
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 20,
-    },
-    textoBotaoLogin: {
-        color: '#fff',
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
+    logo: { width: 120, height: 36, marginBottom: 12 },
     headerTitulo: { fontSize: 28, fontWeight: "bold", color: colors.white },
     headerSubtitulo: { fontSize: 14, color: colors.white, opacity: 0.85, marginTop: 2 },
     busca: {

@@ -2,13 +2,7 @@ import { API_URL } from "../config";
 import cursosMock from "../data/cursosMock";
 import videosMock from "../data/videosMock";
 
-let ultimaFalha = 0;
-
 async function buscarJson(caminho) {
-    if (Date.now() - ultimaFalha < 60000) {
-        throw new Error("Servidor indisponível");
-    }
-
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 60000);
 
@@ -17,7 +11,6 @@ async function buscarJson(caminho) {
         if (!resposta.ok) throw new Error(`Erro ${resposta.status}`);
         return await resposta.json();
     } catch (erro) {
-        ultimaFalha = Date.now();
         throw erro;
     } finally {
         clearTimeout(timer);

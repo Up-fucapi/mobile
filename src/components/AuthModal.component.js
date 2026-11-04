@@ -9,11 +9,12 @@ import {
     TouchableWithoutFeedback,
     KeyboardAvoidingView,
     Platform,
+    ActivityIndicator,
 } from "react-native";
 import SignInForm from "./SignInForm.component.js";
 import SignUpForm from "./SignUpForm.component.js";
 
-function AuthModal({ visible, onClose, mode, onSubmit }) {
+function AuthModal({ visible, onClose, mode, onSubmit, loading = false, error = "" }) {
     const [user, setUser] = useState({
         username: "",
         email: "",
@@ -60,13 +61,26 @@ function AuthModal({ visible, onClose, mode, onSubmit }) {
                                 </View>
                             )}
 
+                            {error ? <Text style={styles.error}>{error}</Text> : null}
+
+                            {loading ? (
+                                <Text style={styles.hint}>
+                                    Conectando ao servidor... a primeira vez pode levar cerca de 1 minuto.
+                                </Text>
+                            ) : null}
+
                             <TouchableOpacity
-                                style={styles.button}
+                                style={[styles.button, loading && styles.buttonDisabled]}
+                                disabled={loading}
                                 onPress={() => onSubmit({ user })}
                             >
-                                <Text style={styles.buttonLabel}>
-                                    {isSignIn ? "Entrar" : "Criar conta"}
-                                </Text>
+                                {loading ? (
+                                    <ActivityIndicator color="#ffffff" />
+                                ) : (
+                                    <Text style={styles.buttonLabel}>
+                                        {isSignIn ? "Entrar" : "Criar conta"}
+                                    </Text>
+                                )}
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -118,6 +132,21 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontSize: 16,
         fontWeight: "700",
+    },
+    buttonDisabled: {
+        opacity: 0.7,
+    },
+    error: {
+        color: "#b91c1c",
+        fontSize: 14,
+        textAlign: "center",
+        marginBottom: 8,
+    },
+    hint: {
+        color: "#6b7a8c",
+        fontSize: 12,
+        textAlign: "center",
+        marginBottom: 8,
     },
     closeButton: {
         marginTop: 14,

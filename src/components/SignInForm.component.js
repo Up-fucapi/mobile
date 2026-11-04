@@ -14,6 +14,7 @@ function SignInForm({ data, onChangeData }) {
                 style={styles.input}
                 placeholderTextColor="#7b7b7b"
                 autoCapitalize="none"
+                autoCorrect={false}
                 keyboardType="email-address"
             />
 
@@ -22,6 +23,7 @@ function SignInForm({ data, onChangeData }) {
                 value={data.password}
                 onChangeText={(value) => onChangeData("password", value)}
                 secureTextEntry
+                autoCapitalize="none"
                 style={styles.input}
                 placeholderTextColor="#7b7b7b"
             />
